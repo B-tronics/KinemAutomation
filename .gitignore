@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# JIGSAWS files
+jigsaws
+
+# All notes
+*.txt
+
+# databases 
+*.sqlite
