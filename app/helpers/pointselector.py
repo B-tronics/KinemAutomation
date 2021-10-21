@@ -33,7 +33,7 @@ class PointSelector:
                 self.points = np.append(self.points, tempPoints, axis=0)
 
             # draw the coordinate points on the frame
-            cv.circle(params, (xCoordinate, yCoordinate), 5, (0,255,0), -1)  
+            cv.circle(params, (xCoordinate, yCoordinate), 1, (0,255,0), -1)  
 
             # write the currently selected point's coordinate to the frame
             cv.putText(params, f"P{self.pointsPrinted + 1}: {self.points[0 + self.pointsPrinted]}", (10, 15 + (20 * self.pointsPrinted)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
