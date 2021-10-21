@@ -1,1 +1,1 @@
-# KinemAuotomation
+# KinemAutomation
