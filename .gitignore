@@ -136,3 +136,6 @@ jigsaws
 
 # databases 
 *.sqlite
+
+# all temporary jpg file*
+*.jpg

@@ -2,11 +2,15 @@
 
 import argparse
 from helpers import log
+import os
+
+# get the base directory name
+BASEDIR = os.getcwd() + "/app"
 # create argument parser and parse the argument
 ap = argparse.ArgumentParser()
 ap.add_argument("-vl", "--video_left", required=True, help="Path to the left video file.")
 ap.add_argument("-vr", "--video_right", required=True, help="Path to the right video file.")
-ap.add_argument("-c", "--config", required=False, default="/home/balint/Projects/KinemAuotomation/app/config.json", help="Path to the config file.")
+ap.add_argument("-c", "--config", required=False, default=f"{BASEDIR}/config.json", help="Path to the config file.")
 args = vars(ap.parse_args())
 
 # get the configuration values
@@ -16,11 +20,14 @@ confData = getConfig(args["config"])
 # set global variables
 LOGFILENAME = confData["LOGFILENAME"]
 TEMPLATENAME = confData["TEMPLATENAME"]
-DATABASENAME = confData["DATABASENAME"]
 JIGSAWSPATH = confData["JIGSAWSPATH"]
 PNPNUMBER = confData["PNPNUMBER"]
 
-import os
+# create database name
+videoFileName = (args["video_left"].split("/")[-1])
+tagsToRemove = videoFileName.split("_")[-1]
+DATABASENAME = videoFileName.replace(f"_{tagsToRemove}", ".sqlite")
+
 # delete the existing log file
 if os.path.exists(LOGFILENAME):
     os.remove(LOGFILENAME)
@@ -55,7 +62,7 @@ from database import models
 jigsawsData = readData(JIGSAWSPATH, getFileName(os.path.basename(args["video_left"])))
 
 # create video-object
-videoObj = cv.VideoCapture(args["video_left"])
+videoObj = cv.VideoCapture(args["video_right"])
 
 # grab the first frame
 frame = videoObj.read()[1]
@@ -145,7 +152,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             # update the points
             x = int(points[0])
             y = int(points[1])
-            cv.circle(frame, (x, y), 5, (0,255,0), -1)
+            cv.circle(frame, (x, y), 1, (0,255,0), -1)
 
             # label the coordinates
             cv.putText(frame, f"P{index + 1}", (x - 10, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
