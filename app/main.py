@@ -20,9 +20,13 @@ confData = getConfig(args["config"])
 # set global variables
 LOGFILENAME = confData["LOGFILENAME"]
 TEMPLATENAME = confData["TEMPLATENAME"]
-DATABASENAME = confData["DATABASENAME"]
 JIGSAWSPATH = confData["JIGSAWSPATH"]
 PNPNUMBER = confData["PNPNUMBER"]
+
+# create database name
+videoFileName = (args["video_left"].split("/")[-1])
+tagsToRemove = videoFileName.split("_")[-1]
+DATABASENAME = videoFileName.replace(f"_{tagsToRemove}", ".sqlite")
 
 # delete the existing log file
 if os.path.exists(LOGFILENAME):
