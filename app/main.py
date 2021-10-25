@@ -48,7 +48,7 @@ logger = createLogger(__name__, LOGFILENAME)
 # import database related modules
 from database.db import BaseDB
 from database.jigsawsdata import readData
-from helpers.getfilename import getFileName
+from helpers.utils import getFileName
 
 # create the database and import the models
 db = BaseDB(DATABASENAME, TEMPLATENAME).db
