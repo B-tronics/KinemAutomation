@@ -1,6 +1,11 @@
 import re
 import cv2
 import os
+from helpers.log import createLogger
+
+# TODO: add logging to this module
+
+logger = createLogger(__name__, "app.log")
 
 def getFileName(path):
     file_name = re.sub("\_capture..avi$", "", path)

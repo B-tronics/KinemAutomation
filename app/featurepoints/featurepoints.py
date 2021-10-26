@@ -37,7 +37,7 @@ def drawFeaturePoints(videoLeft, videoRight):
             cv2.circle(frame, tuple(point), 5, (0,255,0), -1)
 
         # make titles for the commands
-        cv2.putText(frame, "(ESC) to escape.", (30,30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+        cv2.putText(frame, "(ESC) to continue.", (30,30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
         cv2.putText(frame, "(Right mouse click) delete point", (30,60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
 
         # show the picture
@@ -108,9 +108,9 @@ def detectMatchingPoints(videoLeft, videoRight):
     # Create the list of feature points
     points = []
     for point in pointsLeft:
-        points.append(point)
+        points.append((point[0], point[1]))
     for point in pointsRight:
-        points.append(point)
+        points.append((point[0], point[1]))
 
     return points
 

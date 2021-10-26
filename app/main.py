@@ -50,6 +50,10 @@ from database.db import BaseDB
 from database.jigsawsdata import readData
 from helpers.utils import getFileName
 
+# get the matching points
+from featurepoints.featurepoints import detectMatchingPoints
+matchingPoints = detectMatchingPoints(args["video_left"], args["video_right"])
+
 # create the database and import the models
 db = BaseDB(DATABASENAME, TEMPLATENAME).db
 if db is not None:
@@ -72,8 +76,8 @@ winName = "Video"
 cv.namedWindow(winname=winName)
 
 # initialize the pointSelector object and set the mouse callback function
-pointSelector = PointSelector(winName=winName, maxNumberOfPoints=PNPNUMBER)
-cv.setMouseCallback(winName, pointSelector.selectPoints, frame)
+pointSelector = PointSelector(points=matchingPoints)
+cv.setMouseCallback(winName, pointSelector.selectPoints, matchingPoints)
 
 # transform the first frame to gray 
 grayFrameOld = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -87,12 +91,29 @@ lkParams = dict(winSize=(17, 17), maxLevel=2, criteria=(cv.TERM_CRITERIA_EPS | c
 def main(frame=frame, grayFrameOld = grayFrameOld):
 
     # <<<<<<< PRE-PROCESSING >>>>>>>>>
-
+    frameCopy = frame.copy()
     # select the points for PNP estimation
     cv.imshow(winName, frame)
-    while not pointSelector.allPointSelected:
-        cv.waitKey(1)
+    while True:
+
+        # draw the coordinate points on the frame
+        # TODO: traverse the pointSelector._pointsOrder dictionary.
+        for i, point in enumerate(pointSelector._pointsOrder):
+            # TODO: give comments to these lines
+            cv.circle(frame, (pointSelector._pointsOrder[point][0], pointSelector._pointsOrder[point][1]), 5, (0,255,0), -1)
+            cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+            cv.putText(frame, f"{point}", (pointSelector._pointsOrder[point][0]-10, pointSelector._pointsOrder[point][1]-10), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+
+        # show the refreshed frame
+        cv.imshow(winName, frame)
+        key = cv.waitKey(1)
+        if key == 27:
+            break
+        frame = frameCopy.copy()
     logger.info("All points has been specified.")
+
+    # the frame now starts to move
+    pointSelector._frameMoving = True
 
     # initialize frame count
     FRAMECOUNT = 0
