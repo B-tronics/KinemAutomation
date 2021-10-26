@@ -20,13 +20,17 @@ class PointSelector:
         # select points (available only if the frame is standstill)
         if event == cv.EVENT_LBUTTONDOWN and not self._frameMoving:
             if not self._movePoint:
-                self._points.append((xCoordinate, yCoordinate))
                 self._pointsOrder[self._pointNumber] = (xCoordinate, yCoordinate)
                 self._pointNumber += 1
             else:
                 self._pointsOrder[self._pointToMove] = (xCoordinate, yCoordinate)
                 self._movePoint = False
         
+        # update the points list
+        self._points = []
+        for point in self._pointsOrder:
+            self._points.append(self._pointsOrder[point])
+
         # delete a point from the list
         if event == cv.EVENT_RBUTTONDOWN and not self._frameMoving:
             diff = {}
@@ -42,3 +46,8 @@ class PointSelector:
             self._pointsOrder.pop(pointToDelete)
             self._pointToMove = pointToDelete
             self._movePoint = True
+
+            # update the points list
+            self._points = []
+            for point in self._pointsOrder:
+                self._points.append(self._pointsOrder[point])

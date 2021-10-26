@@ -111,7 +111,6 @@ def detectMatchingPoints(videoLeft, videoRight):
         points.append((point[0], point[1]))
     for point in pointsRight:
         points.append((point[0], point[1]))
-
     return points
 
 

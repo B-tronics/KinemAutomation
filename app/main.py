@@ -138,7 +138,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         grayFrameNew = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
         # track the selected points
-        newPoints, status, error = cv.calcOpticalFlowPyrLK(grayFrameOld, grayFrameNew, pointSelector.points, None, **lkParams)
+        newPoints, status, error = cv.calcOpticalFlowPyrLK(grayFrameOld, grayFrameNew, pointSelector._points, None, **lkParams)
 
         if not BaseDB.tablesCreated:
             BaseDB.createTables(BaseDB, model=models.TestDbKinematics)
