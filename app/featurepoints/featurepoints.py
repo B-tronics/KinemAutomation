@@ -1,3 +1,4 @@
+from operator import le
 import cv2
 import numpy as np 
 from helpers.utils import getFirstFrame
@@ -105,12 +106,17 @@ def detectMatchingPoints(videoLeft, videoRight):
     pointsLeft = filterPoints(roiLeft, pointsLeft)
     pointsRight = filterPoints(roiRight, pointsRight)
 
+    cv2.destroyAllWindows()
+
     # Create the list of feature points
-    points = []
+    points = np.zeros((len(pointsLeft) + len(pointsRight), 2), dtype=np.float32)
+    i  = 0
     for point in pointsLeft:
-        points.append((point[0], point[1]))
+        points[i] = point
+        i += 1
     for point in pointsRight:
-        points.append((point[0], point[1]))
+        points[i] = point
+        i += 1
     return points
 
 

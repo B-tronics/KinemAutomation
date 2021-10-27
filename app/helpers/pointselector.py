@@ -8,12 +8,12 @@ class PointSelector:
         self._points = points
         self._frameMoving = False
         self._pointsOrder = {}
-        self._pointNumber = len(self._points)
+        self._pointNumber = points.shape[0]
         self._movePoint = False
         self._pointToMove = -1
 
         # initialize dict
-        for i, value in enumerate(self._points):
+        for i, value in enumerate(points):
             self._pointsOrder[i + 1] = value
 
     def selectPoints(self, event, xCoordinate, yCoordinate, flags, params):
@@ -26,10 +26,10 @@ class PointSelector:
                 self._pointsOrder[self._pointToMove] = (xCoordinate, yCoordinate)
                 self._movePoint = False
         
-        # update the points list
-        self._points = []
-        for point in self._pointsOrder:
-            self._points.append(self._pointsOrder[point])
+            # update the points list
+            self._points = np.zeros((len(self._pointsOrder), 2), dtype=np.float32)
+            for i, key in enumerate(self._pointsOrder):
+                self._points[i] = self._pointsOrder[key]
 
         # delete a point from the list
         if event == cv.EVENT_RBUTTONDOWN and not self._frameMoving:
@@ -48,6 +48,6 @@ class PointSelector:
             self._movePoint = True
 
             # update the points list
-            self._points = []
-            for point in self._pointsOrder:
-                self._points.append(self._pointsOrder[point])
+            self._points = np.zeros((len(self._pointsOrder), 2), dtype=np.float32)
+            for i, key in enumerate(self._pointsOrder):
+                self._points[i] = self._pointsOrder[key]

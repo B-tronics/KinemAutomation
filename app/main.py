@@ -100,9 +100,9 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         # TODO: traverse the pointSelector._pointsOrder dictionary.
         for i, point in enumerate(pointSelector._pointsOrder):
             # TODO: give comments to these lines
-            cv.circle(frame, (pointSelector._pointsOrder[point][0], pointSelector._pointsOrder[point][1]), 5, (0,255,0), -1)
+            cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
             cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-            cv.putText(frame, f"{point}", (pointSelector._pointsOrder[point][0]-10, pointSelector._pointsOrder[point][1]-10), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+            cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
         # show the refreshed frame
         cv.imshow(winName, frame)
@@ -139,7 +139,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
 
         # track the selected points
         newPoints, status, error = cv.calcOpticalFlowPyrLK(grayFrameOld, grayFrameNew, pointSelector._points, None, **lkParams)
-
+        """
         if not BaseDB.tablesCreated:
             BaseDB.createTables(BaseDB, model=models.TestDbKinematics)
 
@@ -164,7 +164,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
                 logger.warning(f"Kinematic data for frame: {FRAMECOUNT}, has failed!")
 
             logger.info(f"Kinematic data for frame: {FRAMECOUNT}, was successfull.")
-
+            """
         # copy the newPoints to the old points
         grayFrameOld = grayFrameNew
 
@@ -173,17 +173,17 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             # update the points
             x = int(points[0])
             y = int(points[1])
-            cv.circle(frame, (x, y), 1, (0,255,0), -1)
+            cv.circle(frame, (x, y), 5, (0,255,0), -1)
 
             # label the coordinates
             cv.putText(frame, f"P{index + 1}", (x - 10, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         
         # write the original points over with the new points
-        pointSelector.points = newPoints
+        pointSelector._points = newPoints
 
         # put the points label to the frame
-        for i in range(len(pointSelector.points)):
-            cv.putText(frame, f"P{i + 1}: {pointSelector.points[0 + i]}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+        for i in range(len(pointSelector._points)):
+            cv.putText(frame, f"P{i + 1}: {pointSelector._points[0 + i]}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
             
 
         # show the current frame
@@ -194,6 +194,15 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         if key == ord('q'):
             logger.warning("Processing of the video files has been interrupted.")
             break
+        if key == ord('p'):
+            while True:
+                pointSelector._frameMoving = False
+                cv.imshow(winName, frame)
+                
+                key_p = cv.waitKey(1)
+                if key_p == ord('q'):
+                    cv.destroyWindow(winName)
+                    break
 
     db.close()
     # <<<<<<<<<< MAIN LOOP >>>>>>>>>>>
