@@ -8,7 +8,7 @@ class PointSelector:
         self._points = points
         self._frameMoving = False
         self._pointsOrder = {}
-        self._pointNumber = points.shape[0]
+        self._pointNumber = points.shape[0] + 1
         self._movePoint = False
         self._pointToMove = -1
 

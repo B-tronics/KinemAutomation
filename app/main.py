@@ -167,23 +167,18 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             """
         # copy the newPoints to the old points
         grayFrameOld = grayFrameNew
-
-        # draw the points to the frame
-        for index, points in enumerate(newPoints):
-            # update the points
-            x = int(points[0])
-            y = int(points[1])
-            cv.circle(frame, (x, y), 5, (0,255,0), -1)
-
-            # label the coordinates
-            cv.putText(frame, f"P{index + 1}", (x - 10, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-        
+       
         # write the original points over with the new points
         pointSelector._points = newPoints
+        for i, key in enumerate(pointSelector._pointsOrder):
+            pointSelector._pointsOrder[key] = newPoints[i]
 
-        # put the points label to the frame
-        for i in range(len(pointSelector._points)):
-            cv.putText(frame, f"P{i + 1}: {pointSelector._points[0 + i]}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+        # update the labels
+        for i, point in enumerate(pointSelector._pointsOrder):
+            # TODO: give comments to these lines
+            cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
+            cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+            cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
             
 
         # show the current frame
@@ -197,15 +192,23 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         if key == ord('p'):
             while True:
                 pointSelector._frameMoving = False
+
+                for i, point in enumerate(pointSelector._pointsOrder):
+                    # TODO: give comments to these lines
+                    cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+
                 cv.imshow(winName, frame)
                 
                 key_p = cv.waitKey(1)
                 if key_p == ord('q'):
-                    cv.destroyWindow(winName)
+                    pointSelector._frameMoving = True
                     break
-
+                frame = frameCopy.copy()
     db.close()
     # <<<<<<<<<< MAIN LOOP >>>>>>>>>>>
 
 if __name__ == "__main__":
     main()
+
