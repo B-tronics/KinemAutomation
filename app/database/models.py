@@ -1,12 +1,16 @@
 import peewee
 from .db import BaseDB
 
+class Video(peewee.Model):
+    id = peewee.PrimaryKeyField()
+    video_name = peewee.TextField(unique=True)
+
 class Kinematics(peewee.Model):
     """
     This class modells the data which is gained from the video files processed.
     """
     id = peewee.PrimaryKeyField()
-    video_name = peewee.TextField(unique=True)
+    video_name = peewee.ForeignKeyField(Video)
     camera_number = peewee.IntegerField
     frame = peewee.IntegerField
     psm_left_pos_x = peewee.FloatField()

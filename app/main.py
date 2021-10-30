@@ -49,6 +49,7 @@ logger = createLogger(__name__, LOGFILENAME)
 from database.db import BaseDB
 from database.jigsawsdata import readData
 from helpers.utils import getFileName
+from poseestimation.pnp import get3DCoordinates
 
 # get the matching points
 from featurepoints.featurepoints import detectMatchingPoints
@@ -179,7 +180,11 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
             cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
             cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
-            
+        
+        # get the 3D coordinates
+        # TODO
+        left3D = get3DCoordinates(pointSelector._points, "left", frame)
+        right3D = get3DCoordinates(pointSelector._points, "right", frame)
 
         # show the current frame
         cv.imshow(winName, frame)        
