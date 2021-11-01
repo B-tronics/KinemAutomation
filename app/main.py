@@ -16,6 +16,7 @@ args = vars(ap.parse_args())
 
 # get the configuration values
 from helpers.config import getConfig
+from helpers.utils import createDBPath
 confData = getConfig(args["config"])
 
 
@@ -24,7 +25,7 @@ globals.LOGFILENAME = confData["LOGFILENAME"]
 globals.TEMPLATENAME = confData["TEMPLATENAME"]
 globals.JIGSAWSPATH = confData["JIGSAWSPATH"]
 globals.PNPNUMBER = confData["PNPNUMBER"]
-globals.DBNAME = confData["DATABASENAME"]
+globals.DBNAME = createDBPath(confData["DATABASENAME"])
 
 # create video table video_name field
 videoFileName = (args["video_left"].split("/")[-1])
