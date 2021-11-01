@@ -1,7 +1,7 @@
 {
     "LOGFILENAME": "app.log",
     "TEMPLATENAME": "/home/balint/Projects/KinemAutomation/app/test.sqlite",
-    "DATABASENAME": "diplomamunka.sqlite",
+    "DATABASENAME": "KinemAutomation.sqlite",
     "JIGSAWSPATH": "/home/balint/Projects/KinemAutomation/app/jigsaws/jigsaws.sqlite",
     "PNPNUMBER": 6
 }

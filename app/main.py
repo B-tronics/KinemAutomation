@@ -3,34 +3,37 @@
 import argparse
 from helpers import log
 import os
+from helpers import globals
 
 # get the base directory name
-BASEDIR = os.getcwd() + "/app"
+globals.BASEDIR = os.getcwd() + "/app"
 # create argument parser and parse the argument
 ap = argparse.ArgumentParser()
 ap.add_argument("-vl", "--video_left", required=True, help="Path to the left video file.")
 ap.add_argument("-vr", "--video_right", required=True, help="Path to the right video file.")
-ap.add_argument("-c", "--config", required=False, default=f"{BASEDIR}/config.json", help="Path to the config file.")
+ap.add_argument("-c", "--config", required=False, default=f"{globals.BASEDIR}/config.json", help="Path to the config file.")
 args = vars(ap.parse_args())
 
 # get the configuration values
 from helpers.config import getConfig
 confData = getConfig(args["config"])
 
-# set global variables
-LOGFILENAME = confData["LOGFILENAME"]
-TEMPLATENAME = confData["TEMPLATENAME"]
-JIGSAWSPATH = confData["JIGSAWSPATH"]
-PNPNUMBER = confData["PNPNUMBER"]
 
-# create database name
+# set global variables
+globals.LOGFILENAME = confData["LOGFILENAME"]
+globals.TEMPLATENAME = confData["TEMPLATENAME"]
+globals.JIGSAWSPATH = confData["JIGSAWSPATH"]
+globals.PNPNUMBER = confData["PNPNUMBER"]
+globals.DBNAME = confData["DATABASENAME"]
+
+# create video table video_name field
 videoFileName = (args["video_left"].split("/")[-1])
 tagsToRemove = videoFileName.split("_")[-1]
-DATABASENAME = videoFileName.replace(f"_{tagsToRemove}", ".sqlite")
+videoName = videoFileName.replace(f"_{tagsToRemove}", "")
 
 # delete the existing log file
-if os.path.exists(LOGFILENAME):
-    os.remove(LOGFILENAME)
+if os.path.exists(globals.LOGFILENAME):
+    os.remove(globals.LOGFILENAME)
 
 # import the neccessary modules
 import cv2 as cv
@@ -43,10 +46,9 @@ from helpers.pointselector import PointSelector
 # <<<<<<< INITIALIZATION >>>>>>>>>
 
 # create the module logger
-logger = createLogger(__name__, LOGFILENAME)
+logger = createLogger(__name__, globals.LOGFILENAME)
 
 # import database related modules
-from database.db import BaseDB
 from database.jigsawsdata import readData
 from helpers.utils import getFileName
 from poseestimation.pnp import get3DCoordinates
@@ -56,15 +58,19 @@ from featurepoints.featurepoints import detectMatchingPoints
 matchingPoints = detectMatchingPoints(args["video_left"], args["video_right"])
 
 # create the database and import the models
-db = BaseDB(DATABASENAME, TEMPLATENAME).db
+from database.db import db
 if db is not None:
     logger.info("Database has been created.")
 
-# import database model
-from database import models
- 
+from database.model import createTables, populateKinematicTable, populateVideoTable
+# Create the database tables
+createTables()
+
+# Populate the database with the current videofile name
+populateVideoTable(videoName)
+
 # get the jigsaws kinematic data for the current video
-jigsawsData = readData(JIGSAWSPATH, getFileName(os.path.basename(args["video_left"])))
+jigsawsData = readData(globals.JIGSAWSPATH, getFileName(os.path.basename(args["video_left"])))
 
 # create video-object
 videoObj = cv.VideoCapture(args["video_right"])
@@ -113,6 +119,10 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         frame = frameCopy.copy()
     logger.info("All points has been specified.")
 
+    from helpers.utils import setCoordinateOrder
+    # Set the coordinate order
+    setCoordinateOrder("left")
+    setCoordinateOrder("right")
     # the frame now starts to move
     pointSelector._frameMoving = True
 
