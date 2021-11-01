@@ -2,6 +2,7 @@ import re
 import cv2
 import os
 from helpers.log import createLogger
+from helpers import globals
 
 # TODO: add logging to this module
 
@@ -37,3 +38,28 @@ def getFirstFrame(video, name):
     cv2.destroyAllWindows()
 
     return frameName
+
+def setCoordinateOrder(psm):
+    
+    print(f"Add the following data for {psm} arm.")
+
+    if psm == "left":
+        # Get the user inputs
+        globals.ORIGO_LEFT_PSM = int(input("Origo: ")) - 1
+        globals.UPRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (upper): ")) - 1
+        globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (lower): ")) - 1
+        globals.LEFT_FROM_ORIGO_LEFT_PSM = int(input("Left from origo: ")) - 1
+        globals.ABOVE_ORIGO_LEFT_PSM = int(input("Above origo: ")) - 1
+        globals.BELOW_ORIGO_LEFT_PSM = int(input("Below origo: ")) - 1
+    elif psm == "right":
+        # Get the user inputs
+        globals.ORIGO_RIGHT_PSM = int(input("Origo: ")) - 1
+        globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (upper): ")) - 1
+        globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (lower): ")) - 1
+        globals.LEFT_FROM_ORIGO_RIGHT_PSM = int(input("Left from origo: ")) - 1
+        globals.ABOVE_ORIGO_RIGHT_PSM = int(input("Above origo: ")) - 1
+        globals.BELOW_ORIGO_RIGHT_PSM = int(input("Below origo: ")) - 1
+
+    else:
+        logger.warning("Wrong psm name was introduced.")
+        exit()

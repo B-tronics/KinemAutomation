@@ -1,31 +1,34 @@
 import re
 import cv2
 import numpy as np
+from helpers import globals
 
-def get3DCoordinates(pointsList, armToCalculate, frame):
-
-    # Get the user inputs
-    print(f"Add the following data for {armToCalculate} arm.")
-    origo = int(input("Origo: ")) - 1
-    rightUpper = int(input("Right from origo (upper): ")) - 1
-    rightLower = int(input("Right from origo (lower): ")) - 1
-    left = int(input("Left from origo: ")) - 1
-    up = int(input("Above origo: ")) - 1
-    down = int(input("Below origo: ")) - 1
+def get3DCoordinates(pointsList, frame, psm):
 
     size = frame.shape
 
-    # 2D image points
-    imagePoints = np.array([
-        (pointsList[origo][0], pointsList[origo][1]),          # Origo
-        (pointsList[rightUpper][0], pointsList[rightUpper][1]),  # Right upper from origo
-        (pointsList[rightLower][0], pointsList[rightLower][1]),  # Right lower from origo
-        (pointsList[left][0], pointsList[left][1]),              # Left from origo
-        (pointsList[up][0], pointsList[up][1]),                  # Above origo
-        (pointsList[down][0], pointsList[down][1])               # Below origo
-    ])
-    
-    # redeclare the 2d variables for convinience
+    if psm == "left":
+        # 2D image points
+        imagePoints = np.array([
+            (pointsList[globals.ORIGO_LEFT_PSM][0], pointsList[globals.ORIGO_LEFT_PSM][1]),                                   # Origo
+            (pointsList[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM][0], pointsList[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM][1]),         # Right upper from origo
+            (pointsList[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM][0], pointsList[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM][1]),     # Right lower from origo
+            (pointsList[globals.LEFT_FROM_ORIGO_LEFT_PSM][0], pointsList[globals.LEFT_FROM_ORIGO_LEFT_PSM][1]),               # Left from origo
+            (pointsList[globals.ABOVE_ORIGO_LEFT_PSM][0], pointsList[globals.ABOVE_ORIGO_LEFT_PSM][1]),                       # Above origo
+            (pointsList[globals.BELOW_ORIGO_LEFT_PSM][0], pointsList[globals.BELOW_ORIGO_LEFT_PSM][1])                        # Below origo
+        ])
+    else:
+        # 2D image points
+        imagePoints = np.array([
+            (pointsList[globals.ORIGO_RIGHT_PSM][0], pointsList[globals.ORIGO_RIGHT_PSM][1]),                                   # Origo
+            (pointsList[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM][0], pointsList[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM][1]),         # Right upper from origo
+            (pointsList[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM][0], pointsList[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM][1]),     # Right lower from origo
+            (pointsList[globals.LEFT_FROM_ORIGO_RIGHT_PSM][0], pointsList[globals.LEFT_FROM_ORIGO_RIGHT_PSM][1]),               # Left from origo
+            (pointsList[globals.ABOVE_ORIGO_RIGHT_PSM][0], pointsList[globals.ABOVE_ORIGO_RIGHT_PSM][1]),                       # Above origo
+            (pointsList[globals.BELOW_ORIGO_RIGHT_PSM][0], pointsList[globals.BELOW_ORIGO_RIGHT_PSM][1])                        # Below origo
+        ])
+
+    # declare the 2d variables for convinience
     origo = (imagePoints[0][0], imagePoints[0][1])
     rightUpper = (imagePoints[1][0], imagePoints[1][1])
     rightLower = (imagePoints[2][0], imagePoints[2][1])
