@@ -2,6 +2,7 @@ import datetime
 from peewee import *
 from .db import db
 from helpers.log import createLogger
+
 # Invoke the logger
 logger = createLogger(__name__, "app.log")
 
@@ -42,5 +43,5 @@ def populateVideoTable(videoName):
     except:
         pass
 
-def populateKinematicTable(kinematicData):
+def populateKinematicTable(kinematicData, videoName):
     pass

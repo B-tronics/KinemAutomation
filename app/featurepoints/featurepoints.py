@@ -102,7 +102,7 @@ def detectMatchingPoints(videoLeft, videoRight):
     # Select the ROI for filtering the matching results (returns: x, y, width, height)
     roiLeft = cv2.selectROI(imageLeft)
     roiRight = cv2.selectROI(imageRight)
-    # TODO: Filter the matches
+    # Filter the matches
     pointsLeft = filterPoints(roiLeft, pointsLeft)
     pointsRight = filterPoints(roiRight, pointsRight)
 

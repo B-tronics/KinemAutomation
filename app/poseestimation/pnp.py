@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from helpers import globals
 
-def get3DCoordinates(pointsList, frame, psm):
+def get3DTransformationData(pointsList, frame, psm):
 
     size = frame.shape
 
@@ -71,3 +71,7 @@ def get3DCoordinates(pointsList, frame, psm):
     distCoeffs = np.zeros((4,1))
     (success, rotationVector, translationVector) = cv2.solvePnP(modelPoints, imagePoints, cameraMatrix, distCoeffs, flags=cv2.CV_ITERATIVE)
     return 0
+
+def get3DCoordinate(coordinate, rotationMatrix, translationMatrix):
+    # TODO: finish the 3D coordinate calculation based on the rotation- and translationMatrix
+    pass

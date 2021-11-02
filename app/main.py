@@ -52,7 +52,7 @@ logger = createLogger(__name__, globals.LOGFILENAME)
 # import database related modules
 from database.jigsawsdata import readData
 from helpers.utils import getFileName
-from poseestimation.pnp import get3DCoordinates
+from poseestimation.pnp import get3DTransformationData
 
 # get the matching points
 from featurepoints.featurepoints import detectMatchingPoints
@@ -105,7 +105,6 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
     while True:
 
         # draw the coordinate points on the frame
-        # TODO: traverse the pointSelector._pointsOrder dictionary.
         for i, point in enumerate(pointSelector._pointsOrder):
             # TODO: give comments to these lines
             cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
@@ -124,8 +123,6 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
     # Set the coordinate order
     setCoordinateOrder("left")
     setCoordinateOrder("right")
-    # the frame now starts to move
-    pointSelector._frameMoving = True
 
     # initialize frame count
     FRAMECOUNT = 0
@@ -137,6 +134,26 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
     while True:
         # grab the next frame
         frame = videoObj.read()[1]
+
+        # wait for the start signal
+        if not pointSelector._frameMoving:
+            frameCopy = frame.copy()
+            while True:
+                # draw the coordinate points on the frame
+                for i, point in enumerate(pointSelector._pointsOrder):
+                    # TODO: give comments to these lines
+                    cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+
+                # show the refreshed frame
+                cv.imshow(winName, frame)
+                key = cv.waitKey(1)
+                if key == ord('a'):
+                    # the frame now starts to move
+                    pointSelector._frameMoving = True
+                    break
+                frame = frameCopy.copy()
 
         # increase the frame count
         FRAMECOUNT += 1
@@ -151,32 +168,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
 
         # track the selected points
         newPoints, status, error = cv.calcOpticalFlowPyrLK(grayFrameOld, grayFrameNew, pointSelector._points, None, **lkParams)
-        """
-        if not BaseDB.tablesCreated:
-            BaseDB.createTables(BaseDB, model=models.TestDbKinematics)
 
-        if DATABASENAME != "diplomamunka.sqite":
-            data = models.TestDbKinematics(
-                                    P1_x_coordinate=newPoints[0][0], 
-                                    P1_y_coordinate=newPoints[0][1],
-                                    P2_x_coordinate=newPoints[1][0],
-                                    P2_y_coordinate=newPoints[1][1],
-                                    P3_x_coordinate=newPoints[2][0],
-                                    P3_y_coordinate=newPoints[2][1],
-                                    P4_x_coordinate=newPoints[3][0],
-                                    P4_y_coordinate=newPoints[3][1],
-                                    P5_x_coordinate=newPoints[4][0],
-                                    P5_y_coordinate=newPoints[4][1],
-                                    P6_x_coordinate=newPoints[5][0],
-                                    P6_y_coordinate=newPoints[5][1]
-            )
-            try:       
-                data.save()
-            except:
-                logger.warning(f"Kinematic data for frame: {FRAMECOUNT}, has failed!")
-
-            logger.info(f"Kinematic data for frame: {FRAMECOUNT}, was successfull.")
-            """
         # copy the newPoints to the old points
         grayFrameOld = grayFrameNew
        
@@ -194,18 +186,21 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         
         # get the 3D coordinates
         # TODO
-        left3D = get3DCoordinates(pointSelector._points, "left", frame)
-        right3D = get3DCoordinates(pointSelector._points, "right", frame)
+        # left3D = get3DTransformationData(pointSelector._points, "left", frame)
+        # right3D = get3DTransformationData(pointSelector._points, "right", frame)
+
+        # TODO: Save the Kinematic data for the right video_name
 
         # show the current frame
         cv.imshow(winName, frame)        
-        key = cv.waitKey(1) & 0xFF
+        key = cv.waitKey(10) & 0xFF
 
         # if 'q' key was pressed, break the loop
         if key == ord('q'):
             logger.warning("Processing of the video files has been interrupted.")
             break
         if key == ord('p'):
+            frameCopy = videoObj.read()[1]
             while True:
                 pointSelector._frameMoving = False
 
