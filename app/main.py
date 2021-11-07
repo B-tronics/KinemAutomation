@@ -25,7 +25,7 @@ globals.LOGFILENAME = confData["LOGFILENAME"]
 globals.TEMPLATENAME = confData["TEMPLATENAME"]
 globals.JIGSAWSPATH = confData["JIGSAWSPATH"]
 globals.PNPNUMBER = confData["PNPNUMBER"]
-globals.DBNAME = createDBPath(confData["DATABASENAME"])
+globals.DBNAME = confData["DATABASENAME"]
 
 # create video table video_name field
 videoFileName = (args["video_left"].split("/")[-1])
@@ -52,7 +52,7 @@ logger = createLogger(__name__, globals.LOGFILENAME)
 # import database related modules
 from database.jigsawsdata import readData
 from helpers.utils import getFileName
-from poseestimation.pnp import get3DTransformationData
+# from poseestimation.pnp import get3DTransformationData
 
 # get the matching points
 from featurepoints.featurepoints import detectMatchingPoints
@@ -63,13 +63,37 @@ from database.db import db
 if db is not None:
     logger.info("Database has been created.")
 
-from database.model import createTables, populateKinematicTable, populateVideoTable
+from database.model import createTables, deleteExistingVideoRows, populateVideoTable, getVideoId, deleteExistingKinematicRows, populateKinematic2DTable
 # Create the database tables
 createTables()
 
-# Populate the database with the current videofile name
+# test populate kinematic table
+data = {
+    "video_name": videoName,
+    "psm_origo_x": 1,
+    "psm_origo_y": 2,
+    "psm_leftFromOrigo_x": 3,
+    "psm_leftFromOrigo_y": 4,
+    "psm_rightFromOrigoUp_x": 5,
+    "psm_rightFromOrigoUp_y": 6,
+    "psm_rightFromOrigoDown_x": 7,
+    "psm_rightFromOrigoDown_y": 8,
+    "psm_belowOrigo_x": 9,
+    "psm_belowOrigo_y": 10,
+    "psm_aboveOrigo_x": 11,
+    "psm_aboveOrigo_y": 12
+    }
+
+# Check if instance data for the current video file already exists, and if so, delete it so always the fresh data is used.
+db.execute(deleteExistingKinematicRows(videoName, 'right'))
+db.execute(deleteExistingKinematicRows(videoName, 'left'))
+db.execute(deleteExistingVideoRows(videoName))
+
+# Populate the video table
 populateVideoTable(videoName)
 
+# get the videoIds for populating the kinematic tables
+leftVideoId, rightVideoId = getVideoId(videoName)
 # get the jigsaws kinematic data for the current video
 jigsawsData = readData(globals.JIGSAWSPATH, getFileName(os.path.basename(args["video_left"])))
 

@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["-vl", "/home/balint/Projects/KinemAutomation/app/jigsaws/Knot_Tying/video/Knot_Tying_B001_capture1.avi", "-vr", "/home/balint/Projects/KinemAutomation/app/jigsaws/Knot_Tying/video/Knot_Tying_B001_capture2.avi"]
+            "args": ["-vl", "/home/balint/Projects/KinemAutomation/app/jigsaws/Knot_Tying/video/Knot_Tying_B003_capture1.avi", "-vr", "/home/balint/Projects/KinemAutomation/app/jigsaws/Knot_Tying/video/Knot_Tying_B003_capture2.avi"]
         }
     ]
 }
