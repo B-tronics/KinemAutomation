@@ -67,26 +67,13 @@ from database.model import createTables, deleteExistingVideoRows, populateVideoT
 # Create the database tables
 createTables()
 
-# test populate kinematic table
-data = {
-    "video_name": videoName,
-    "psm_origo_x": 1,
-    "psm_origo_y": 2,
-    "psm_leftFromOrigo_x": 3,
-    "psm_leftFromOrigo_y": 4,
-    "psm_rightFromOrigoUp_x": 5,
-    "psm_rightFromOrigoUp_y": 6,
-    "psm_rightFromOrigoDown_x": 7,
-    "psm_rightFromOrigoDown_y": 8,
-    "psm_belowOrigo_x": 9,
-    "psm_belowOrigo_y": 10,
-    "psm_aboveOrigo_x": 11,
-    "psm_aboveOrigo_y": 12
-    }
-
 # Check if instance data for the current video file already exists, and if so, delete it so always the fresh data is used.
-db.execute(deleteExistingKinematicRows(videoName, 'right'))
-db.execute(deleteExistingKinematicRows(videoName, 'left'))
+execDelRight = deleteExistingKinematicRows(videoName, 'right')
+execDelLeft = deleteExistingKinematicRows(videoName, 'left')
+if execDelRight is not None:    
+    db.execute(execDelRight)
+if execDelLeft is not None:
+    db.execute(execDelLeft)
 db.execute(deleteExistingVideoRows(videoName))
 
 # Populate the video table
@@ -144,6 +131,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
     logger.info("All points has been specified.")
 
     from helpers.utils import setCoordinateOrder
+
     # Set the coordinate order
     setCoordinateOrder("left")
     setCoordinateOrder("right")
@@ -156,6 +144,21 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
     # <<<<<<<<<< MAIN LOOP >>>>>>>>>>>
 
     while True:
+        # update the kinematic data dictionary
+        pointsOrder = {
+        "ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ORIGO_LEFT_PSM + 1],
+        "UPRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM + 1],
+        "DOWNRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM + 1],
+        "LEFT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_LEFT_PSM + 1],
+        "ABOVE_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_LEFT_PSM + 1],
+        "BELOW_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_LEFT_PSM + 1],
+        "ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ORIGO_RIGHT_PSM + 1],
+        "UPRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM + 1],
+        "DOWNRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM + 1],
+        "LEFT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_RIGHT_PSM + 1],
+        "ABOVE_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_RIGHT_PSM + 1],
+        "BELOW_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_RIGHT_PSM + 1]
+    }
         # grab the next frame
         frame = videoObj.read()[1]
 
@@ -164,11 +167,11 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             frameCopy = frame.copy()
             while True:
                 # draw the coordinate points on the frame
-                for i, point in enumerate(pointSelector._pointsOrder):
+                for i, point in enumerate(pointsOrder):
                     # TODO: give comments to these lines
-                    cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(pointsOrder[point][0]-10), int(pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 # show the refreshed frame
                 cv.imshow(winName, frame)
@@ -202,19 +205,20 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             pointSelector._pointsOrder[key] = newPoints[i]
 
         # update the labels
-        for i, point in enumerate(pointSelector._pointsOrder):
+        for i, point in enumerate(pointsOrder):
             # TODO: give comments to these lines
-            cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
-            cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-            cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+            cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
+            cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+            #cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
         
         # get the 3D coordinates
         # TODO
         # left3D = get3DTransformationData(pointSelector._points, "left", frame)
         # right3D = get3DTransformationData(pointSelector._points, "right", frame)
 
-        # TODO: Save the Kinematic data for the right video_name
-
+        # Save the Kinematic data for the right video_name
+        populateKinematic2DTable(pointsOrder, videoName, "left")
+        populateKinematic2DTable(pointsOrder, videoName, "right")
         # show the current frame
         cv.imshow(winName, frame)        
         key = cv.waitKey(10) & 0xFF
@@ -228,11 +232,11 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             while True:
                 pointSelector._frameMoving = False
 
-                for i, point in enumerate(pointSelector._pointsOrder):
+                for i, point in enumerate(pointsOrder):
                     # TODO: give comments to these lines
                     cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(pointsOrder[point][0]-10), int(pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 cv.imshow(winName, frame)
                 

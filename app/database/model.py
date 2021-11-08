@@ -71,35 +71,59 @@ def populateVideoTable(videoName):
     except:
         pass
 
-def populateKinematic2DTable(kinematicData, videoName, psmSide):
-    
-    Kinematics2D.create(
-        video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
-        psm_origo_x = kinematicData["psm_origo_x"],
-        psm_origo_y = kinematicData["psm_origo_y"],
-        psm_leftFromOrigo_x = kinematicData["psm_leftFromOrigo_x"],
-        psm_leftFromOrigo_y = kinematicData["psm_leftFromOrigo_y"],
-        psm_rightFromOrigoUp_x = kinematicData["psm_rightFromOrigoUp_x"],
-        psm_rightFromOrigoUp_y = kinematicData["psm_rightFromOrigoUp_y"],
-        psm_rightFromOrigoDown_x = kinematicData["psm_rightFromOrigoDown_x"],
-        psm_rightFromOrigoDown_y = kinematicData["psm_rightFromOrigoDown_y"],
-        psm_belowOrigo_x = kinematicData["psm_belowOrigo_x"],
-        psm_belowOrigo_y = kinematicData["psm_belowOrigo_y"],
-        psm_aboveOrigo_x = kinematicData["psm_aboveOrigo_x"],
-        psm_aboveOrigo_y = kinematicData["psm_aboveOrigo_y"],
-    )
+def populateKinematic2DTable(kinematicData, videoName, psmSide):    
+    if psmSide == "left":
+        Kinematics2D.create(
+            video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+            psm_origo_x = kinematicData["ORIGO_LEFT_PSM"][0],
+            psm_origo_y = kinematicData["ORIGO_LEFT_PSM"][1],
+            psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][0],
+            psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][1],
+            psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][0],
+            psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][1],
+            psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][0],
+            psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][1],
+            psm_belowOrigo_x = kinematicData["BELOW_ORIGO_LEFT_PSM"][0],
+            psm_belowOrigo_y = kinematicData["BELOW_ORIGO_LEFT_PSM"][1],
+            psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_LEFT_PSM"][0],
+            psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_LEFT_PSM"][1],
+        )
+    elif psmSide == "right":
+        Kinematics2D.create(
+            video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+            psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"][0],
+            psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"][1],
+            psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][0],
+            psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][1],
+            psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
+            psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
+            psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
+            psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
+            psm_belowOrigo_x = kinematicData["BELOW_ORIGO_RIGHT_PSM"][0],
+            psm_belowOrigo_y = kinematicData["BELOW_ORIGO_RIGHT_PSM"][1],
+            psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][0],
+            psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][1],
+        )
 
 def getVideoId(videoName):
-    left = (Video.get(Video.video_name==videoName, Video.psm_side == "left")).id
-    right = (Video.get(Video.video_name==videoName, Video.psm_side == "right")).id
+    try:
+        left = (Video.get(Video.video_name==videoName, Video.psm_side == "left")).id
+    except:
+        left = None
+    try:
+        right = (Video.get(Video.video_name==videoName, Video.psm_side == "right")).id
+    except:
+        right = None
     return left, right
 
 def deleteExistingKinematicRows(videoName, psm_side):
     leftId, rightId = getVideoId(videoName)
-    if psm_side == 'right':
+    if psm_side == 'right' and rightId is not None:
         return Kinematics2D.delete().where(Kinematics2D.video_name == rightId)
-    elif psm_side == 'left':
+    elif psm_side == 'left' and leftId is not None:
         return Kinematics2D.delete().where(Kinematics2D.video_name == leftId)
+    else:
+        return None
 
 def deleteExistingVideoRows(videoName):
     return Video.delete().where(Video.video_name == videoName)
