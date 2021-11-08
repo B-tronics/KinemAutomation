@@ -145,19 +145,19 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
 
     while True:
         # update the kinematic data dictionary
-        pointsOrder = {
-        "ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ORIGO_LEFT_PSM + 1],
-        "UPRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM + 1],
-        "DOWNRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM + 1],
-        "LEFT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_LEFT_PSM + 1],
-        "ABOVE_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_LEFT_PSM + 1],
-        "BELOW_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_LEFT_PSM + 1],
-        "ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ORIGO_RIGHT_PSM + 1],
-        "UPRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM + 1],
-        "DOWNRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM + 1],
-        "LEFT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_RIGHT_PSM + 1],
-        "ABOVE_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_RIGHT_PSM + 1],
-        "BELOW_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_RIGHT_PSM + 1]
+        globals.POINTSORDER = {
+        "ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ORIGO_LEFT_PSM],
+        "UPRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM],
+        "DOWNRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM],
+        "LEFT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_LEFT_PSM],
+        "ABOVE_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_LEFT_PSM],
+        "BELOW_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_LEFT_PSM],
+        "ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ORIGO_RIGHT_PSM],
+        "UPRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM],
+        "DOWNRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM],
+        "LEFT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_RIGHT_PSM],
+        "ABOVE_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_RIGHT_PSM],
+        "BELOW_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_RIGHT_PSM]
     }
         # grab the next frame
         frame = videoObj.read()[1]
@@ -167,11 +167,11 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             frameCopy = frame.copy()
             while True:
                 # draw the coordinate points on the frame
-                for i, point in enumerate(pointsOrder):
+                for i, point in enumerate(globals.POINTSORDER):
                     # TODO: give comments to these lines
-                    cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(pointsOrder[point][0]-10), int(pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 # show the refreshed frame
                 cv.imshow(winName, frame)
@@ -205,10 +205,10 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             pointSelector._pointsOrder[key] = newPoints[i]
 
         # update the labels
-        for i, point in enumerate(pointsOrder):
+        for i, point in enumerate(globals.POINTSORDER):
             # TODO: give comments to these lines
-            cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
-            cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+            cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
+            cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
             #cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
         
         # get the 3D coordinates
@@ -217,8 +217,8 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         # right3D = get3DTransformationData(pointSelector._points, "right", frame)
 
         # Save the Kinematic data for the right video_name
-        populateKinematic2DTable(pointsOrder, videoName, "left")
-        populateKinematic2DTable(pointsOrder, videoName, "right")
+        populateKinematic2DTable(globals.POINTSORDER, videoName, "left")
+        populateKinematic2DTable(globals.POINTSORDER, videoName, "right")
         # show the current frame
         cv.imshow(winName, frame)        
         key = cv.waitKey(10) & 0xFF
@@ -229,14 +229,30 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
             break
         if key == ord('p'):
             frameCopy = videoObj.read()[1]
+
             while True:
+                if not pointSelector._movePoint:
+                    globals.POINTSORDER = {
+                        "ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ORIGO_LEFT_PSM],
+                        "UPRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_LEFT_PSM ],
+                        "DOWNRIGHT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM],
+                        "LEFT_FROM_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_LEFT_PSM],
+                        "ABOVE_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_LEFT_PSM],
+                        "BELOW_ORIGO_LEFT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_LEFT_PSM],
+                        "ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ORIGO_RIGHT_PSM],
+                        "UPRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM],
+                        "DOWNRIGHT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM],
+                        "LEFT_FROM_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.LEFT_FROM_ORIGO_RIGHT_PSM],
+                        "ABOVE_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.ABOVE_ORIGO_RIGHT_PSM],
+                        "BELOW_ORIGO_RIGHT_PSM": pointSelector._pointsOrder[globals.BELOW_ORIGO_RIGHT_PSM]
+                    }
                 pointSelector._frameMoving = False
 
-                for i, point in enumerate(pointsOrder):
+                for i, point in enumerate(globals.POINTSORDER):
                     # TODO: give comments to these lines
-                    cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(pointsOrder[point][0]-10), int(pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 cv.imshow(winName, frame)
                 

@@ -3,6 +3,8 @@ from re import S
 import cv2 as cv
 import numpy as np
 import math
+
+from helpers.globals import POINTSORDER
 class PointSelector:
     def __init__(self, points):
         self._points = points
@@ -11,7 +13,6 @@ class PointSelector:
         self._pointNumber = points.shape[0] + 1
         self._movePoint = False
         self._pointToMove = -1
-
         # initialize dict
         for i, value in enumerate(points):
             self._pointsOrder[i + 1] = value
@@ -24,7 +25,7 @@ class PointSelector:
                 self._pointNumber += 1
             else:
                 self._pointsOrder[self._pointToMove] = (xCoordinate, yCoordinate)
-                self._movePoint = False
+                self._movePoint = False 
         
             # update the points list
             self._points = np.zeros((len(self._pointsOrder), 2), dtype=np.float32)
@@ -51,3 +52,4 @@ class PointSelector:
             self._points = np.zeros((len(self._pointsOrder), 2), dtype=np.float32)
             for i, key in enumerate(self._pointsOrder):
                 self._points[i] = self._pointsOrder[key]
+        

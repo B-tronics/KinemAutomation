@@ -45,20 +45,20 @@ def setCoordinateOrder(psm):
 
     if psm == "left":
         # Get the user inputs
-        globals.ORIGO_LEFT_PSM = int(input("Origo: ")) - 1
-        globals.UPRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (upper): ")) - 1
-        globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (lower): ")) - 1
-        globals.LEFT_FROM_ORIGO_LEFT_PSM = int(input("Left from origo: ")) - 1
-        globals.ABOVE_ORIGO_LEFT_PSM = int(input("Above origo: ")) - 1
-        globals.BELOW_ORIGO_LEFT_PSM = int(input("Below origo: ")) - 1
+        globals.ORIGO_LEFT_PSM = int(input("Origo: "))
+        globals.UPRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (upper): "))
+        globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM = int(input("Right from origo (lower): "))
+        globals.LEFT_FROM_ORIGO_LEFT_PSM = int(input("Left from origo: "))
+        globals.ABOVE_ORIGO_LEFT_PSM = int(input("Above origo: "))
+        globals.BELOW_ORIGO_LEFT_PSM = int(input("Below origo: "))
     elif psm == "right":
         # Get the user inputs
-        globals.ORIGO_RIGHT_PSM = int(input("Origo: ")) - 1
-        globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (upper): ")) - 1
-        globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (lower): ")) - 1
-        globals.LEFT_FROM_ORIGO_RIGHT_PSM = int(input("Left from origo: ")) - 1
-        globals.ABOVE_ORIGO_RIGHT_PSM = int(input("Above origo: ")) - 1
-        globals.BELOW_ORIGO_RIGHT_PSM = int(input("Below origo: ")) - 1
+        globals.ORIGO_RIGHT_PSM = int(input("Origo: "))
+        globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (upper): "))
+        globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM = int(input("Right from origo (lower): "))
+        globals.LEFT_FROM_ORIGO_RIGHT_PSM = int(input("Left from origo: "))
+        globals.ABOVE_ORIGO_RIGHT_PSM = int(input("Above origo: "))
+        globals.BELOW_ORIGO_RIGHT_PSM = int(input("Below origo: "))
 
     else:
         logger.warning("Wrong psm name was introduced.")

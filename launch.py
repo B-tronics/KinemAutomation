@@ -15,6 +15,6 @@ with open(args["file"]) as f:
         finished = False
         while not finished:
             subprocess.run(["python3", "app/main.py", "-vl", pipes.quote(name.strip('\n')), "-vr", pipes.quote(name1.strip('\n'))])
-            answer = input("Is the process complete? Y/N")
+            answer = input("Is the process complete? Y/N: ")
             if answer == 'Y' or answer =='y':
                 finished = True
