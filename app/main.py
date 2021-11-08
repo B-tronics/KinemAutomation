@@ -234,7 +234,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
 
                 for i, point in enumerate(pointsOrder):
                     # TODO: give comments to these lines
-                    cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
+                    cv.circle(frame, (int(pointsOrder[point][0]), int(pointsOrder[point][1])), 5, (0,255,0), -1)
                     cv.putText(frame, f"{point} : {(pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
                     cv.putText(frame, f"{point}", (int(pointsOrder[point][0]-10), int(pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
