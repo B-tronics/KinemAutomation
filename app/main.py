@@ -92,7 +92,8 @@ frame = videoObj.read()[1]
 
 # create the window to show
 winName = "Video"
-cv.namedWindow(winname=winName)
+cv.namedWindow(winName, cv.WINDOW_NORMAL)
+cv.resizeWindow(winName, 1280, 768)
 
 # initialize the pointSelector object and set the mouse callback function
 pointSelector = PointSelector(points=matchingPoints)
@@ -118,9 +119,9 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         # draw the coordinate points on the frame
         for i, point in enumerate(pointSelector._pointsOrder):
             # TODO: give comments to these lines
-            cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 5, (0,255,0), -1)
-            cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-            cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+            cv.circle(frame, (int(pointSelector._pointsOrder[point][0]), int(pointSelector._pointsOrder[point][1])), 2, (0,255,0), -1)
+            cv.putText(frame, f"{point} : {(pointSelector._pointsOrder[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 2)
+            cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.4, (0,255,0), 2)
 
         # show the refreshed frame
         cv.imshow(winName, frame)
@@ -138,6 +139,21 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
 
     # initialize frame count
     FRAMECOUNT = 0
+
+    globals.POSITIONSLIST = [
+        globals.ORIGO_LEFT_PSM,
+        globals.UPRIGHT_FROM_ORIGO_LEFT_PSM,
+        globals.DOWNRIGHT_FROM_ORIGO_LEFT_PSM,
+        globals.LEFT_FROM_ORIGO_LEFT_PSM,
+        globals.ABOVE_ORIGO_LEFT_PSM,
+        globals.BELOW_ORIGO_LEFT_PSM,
+        globals.ORIGO_RIGHT_PSM,
+        globals.UPRIGHT_FROM_ORIGO_RIGHT_PSM,
+        globals.DOWNRIGHT_FROM_ORIGO_RIGHT_PSM,
+        globals.LEFT_FROM_ORIGO_RIGHT_PSM,
+        globals.ABOVE_ORIGO_RIGHT_PSM,
+        globals.BELOW_ORIGO_RIGHT_PSM
+    ]
 
     # <<<<<<< PRE-PROCESSING >>>>>>>>>
 
@@ -169,9 +185,9 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
                 # draw the coordinate points on the frame
                 for i, point in enumerate(globals.POINTSORDER):
                     # TODO: give comments to these lines
-                    cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 2, (0,255,0), -1)
+                    cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 2)
+                    cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.4, (0,255,0), 2)
 
                 # show the refreshed frame
                 cv.imshow(winName, frame)
@@ -208,7 +224,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         for i, point in enumerate(globals.POINTSORDER):
             # TODO: give comments to these lines
             cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
-            cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+            #cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
             #cv.putText(frame, f"{point}", (int(pointSelector._pointsOrder[point][0]-10), int(pointSelector._pointsOrder[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
         
         # get the 3D coordinates
@@ -221,7 +237,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         populateKinematic2DTable(globals.POINTSORDER, videoName, "right")
         # show the current frame
         cv.imshow(winName, frame)        
-        key = cv.waitKey(10) & 0xFF
+        key = cv.waitKey(500) & 0xFF
 
         # if 'q' key was pressed, break the loop
         if key == ord('q'):
@@ -252,7 +268,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
                     # TODO: give comments to these lines
                     cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
                     cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
-                    cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+                    #cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 cv.imshow(winName, frame)
                 

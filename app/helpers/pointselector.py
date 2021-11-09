@@ -1,10 +1,11 @@
 from operator import le
 from re import S
+from typing import ValuesView
 import cv2 as cv
 import numpy as np
 import math
 
-from helpers.globals import POINTSORDER
+from helpers import globals
 class PointSelector:
     def __init__(self, points):
         self._points = points
@@ -44,6 +45,16 @@ class PointSelector:
             diffValues = list(diff.values())
             valueToDelete = diffValues.index(min(diffValues))
             pointToDelete = diffKeys[valueToDelete]
+
+            # TODO print which value will be moved
+            try:
+                index = globals.POSITIONSLIST.index(pointToDelete)
+                for i, position in enumerate(globals.POINTSORDER):
+                    if i == index:
+                        print(position)
+            except:
+                pass
+
             self._pointsOrder.pop(pointToDelete)
             self._pointToMove = pointToDelete
             self._movePoint = True
