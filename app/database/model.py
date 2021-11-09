@@ -17,6 +17,7 @@ class Video(BaseModel):
 
 class Kinematics2D(BaseModel):
     video_name = ForeignKeyField(Video, backref='kinematics2D', on_delete='CASCADE')
+    frame = IntegerField()
     psm_origo_x = FloatField()
     psm_origo_y = FloatField()
     psm_leftFromOrigo_x = FloatField()
@@ -71,10 +72,11 @@ def populateVideoTable(videoName):
     except:
         pass
 
-def populateKinematic2DTable(kinematicData, videoName, psmSide):    
+def populateKinematic2DTable(kinematicData, videoName, psmSide, frame):    
     if psmSide == "left":
         Kinematics2D.create(
             video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+            frame = frame,
             psm_origo_x = kinematicData["ORIGO_LEFT_PSM"][0],
             psm_origo_y = kinematicData["ORIGO_LEFT_PSM"][1],
             psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][0],
@@ -91,6 +93,7 @@ def populateKinematic2DTable(kinematicData, videoName, psmSide):
     elif psmSide == "right":
         Kinematics2D.create(
             video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+            frame = frame,
             psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"][0],
             psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"][1],
             psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][0],

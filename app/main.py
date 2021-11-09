@@ -233,8 +233,8 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         # right3D = get3DTransformationData(pointSelector._points, "right", frame)
 
         # Save the Kinematic data for the right video_name
-        populateKinematic2DTable(globals.POINTSORDER, videoName, "left")
-        populateKinematic2DTable(globals.POINTSORDER, videoName, "right")
+        populateKinematic2DTable(globals.POINTSORDER, videoName, "left", FRAMECOUNT)
+        populateKinematic2DTable(globals.POINTSORDER, videoName, "right", FRAMECOUNT)
         # show the current frame
         cv.imshow(winName, frame)        
         key = cv.waitKey(500) & 0xFF
@@ -267,7 +267,7 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
                 for i, point in enumerate(globals.POINTSORDER):
                     # TODO: give comments to these lines
                     cv.circle(frame, (int(globals.POINTSORDER[point][0]), int(globals.POINTSORDER[point][1])), 5, (0,255,0), -1)
-                    cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+                    #cv.putText(frame, f"{point} : {(globals.POINTSORDER[point])}", (10, 15 + (20 * i)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
                     #cv.putText(frame, f"{point}", (int(globals.POINTSORDER[point][0]-10), int(globals.POINTSORDER[point][1]-10)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
 
                 cv.imshow(winName, frame)
