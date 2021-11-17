@@ -72,41 +72,79 @@ def populateVideoTable(videoName):
     except:
         pass
 
-def populateKinematic2DTable(kinematicData, videoName, psmSide, frame):    
-    if psmSide == "left":
-        Kinematics2D.create(
-            video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
-            frame = frame,
-            psm_origo_x = kinematicData["ORIGO_LEFT_PSM"][0],
-            psm_origo_y = kinematicData["ORIGO_LEFT_PSM"][1],
-            psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][0],
-            psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][1],
-            psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][0],
-            psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][1],
-            psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][0],
-            psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][1],
-            psm_belowOrigo_x = kinematicData["BELOW_ORIGO_LEFT_PSM"][0],
-            psm_belowOrigo_y = kinematicData["BELOW_ORIGO_LEFT_PSM"][1],
-            psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_LEFT_PSM"][0],
-            psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_LEFT_PSM"][1],
-        )
-    elif psmSide == "right":
-        Kinematics2D.create(
-            video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
-            frame = frame,
-            psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"][0],
-            psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"][1],
-            psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][0],
-            psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][1],
-            psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
-            psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
-            psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
-            psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
-            psm_belowOrigo_x = kinematicData["BELOW_ORIGO_RIGHT_PSM"][0],
-            psm_belowOrigo_y = kinematicData["BELOW_ORIGO_RIGHT_PSM"][1],
-            psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][0],
-            psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][1],
-        )
+def populateKinematic2DTable(kinematicData, videoName, psmSide, frame, Null=False): 
+    if not Null:  
+        if psmSide == "left":
+            Kinematics2D.create(
+                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                frame = frame,
+                psm_origo_x = kinematicData["ORIGO_LEFT_PSM"][0],
+                psm_origo_y = kinematicData["ORIGO_LEFT_PSM"][1],
+                psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][0],
+                psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"][1],
+                psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][0],
+                psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"][1],
+                psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][0],
+                psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"][1],
+                psm_belowOrigo_x = kinematicData["BELOW_ORIGO_LEFT_PSM"][0],
+                psm_belowOrigo_y = kinematicData["BELOW_ORIGO_LEFT_PSM"][1],
+                psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_LEFT_PSM"][0],
+                psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_LEFT_PSM"][1],
+            )
+        elif psmSide == "right":
+            Kinematics2D.create(
+                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                frame = frame,
+                psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"][0],
+                psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"][1],
+                psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][0],
+                psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"][1],
+                psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
+                psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
+                psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][0],
+                psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"][1],
+                psm_belowOrigo_x = kinematicData["BELOW_ORIGO_RIGHT_PSM"][0],
+                psm_belowOrigo_y = kinematicData["BELOW_ORIGO_RIGHT_PSM"][1],
+                psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][0],
+                psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_RIGHT_PSM"][1],
+            )
+    else:
+        if psmSide == "left":
+            Kinematics2D.create(
+                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                frame = frame,
+                psm_origo_x = kinematicData["ORIGO_LEFT_PSM"],
+                psm_origo_y = kinematicData["ORIGO_LEFT_PSM"],
+                psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"],
+                psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_LEFT_PSM"],
+                psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"],
+                psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_LEFT_PSM"],
+                psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"],
+                psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_LEFT_PSM"],
+                psm_belowOrigo_x = kinematicData["BELOW_ORIGO_LEFT_PSM"],
+                psm_belowOrigo_y = kinematicData["BELOW_ORIGO_LEFT_PSM"],
+                psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_LEFT_PSM"],
+                psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_LEFT_PSM"],
+            )
+
+        elif psmSide == "right":
+            Kinematics2D.create(
+                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                frame = frame,
+                psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"],
+                psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"],
+                psm_leftFromOrigo_x = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"],
+                psm_leftFromOrigo_y = kinematicData["LEFT_FROM_ORIGO_RIGHT_PSM"],
+                psm_rightFromOrigoUp_x = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"],
+                psm_rightFromOrigoUp_y = kinematicData["UPRIGHT_FROM_ORIGO_RIGHT_PSM"],
+                psm_rightFromOrigoDown_x = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"],
+                psm_rightFromOrigoDown_y = kinematicData["DOWNRIGHT_FROM_ORIGO_RIGHT_PSM"],
+                psm_belowOrigo_x = kinematicData["BELOW_ORIGO_RIGHT_PSM"],
+                psm_belowOrigo_y = kinematicData["BELOW_ORIGO_RIGHT_PSM"],
+                psm_aboveOrigo_x = kinematicData["ABOVE_ORIGO_RIGHT_PSM"],
+                psm_aboveOrigo_y = kinematicData["ABOVE_ORIGO_RIGHT_PSM"],
+            )
+        
 
 def getVideoId(videoName):
     try:

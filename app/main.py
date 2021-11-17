@@ -154,7 +154,20 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         globals.ABOVE_ORIGO_RIGHT_PSM,
         globals.BELOW_ORIGO_RIGHT_PSM
     ]
-
+    globals.POINTSNULL = {
+        "ORIGO_LEFT_PSM": 0,
+        "UPRIGHT_FROM_ORIGO_LEFT_PSM": 0,
+        "DOWNRIGHT_FROM_ORIGO_LEFT_PSM": 0,
+        "LEFT_FROM_ORIGO_LEFT_PSM": 0,
+        "ABOVE_ORIGO_LEFT_PSM": 0,
+        "BELOW_ORIGO_LEFT_PSM": 0,
+        "ORIGO_RIGHT_PSM": 0,
+        "UPRIGHT_FROM_ORIGO_RIGHT_PSM": 0,
+        "DOWNRIGHT_FROM_ORIGO_RIGHT_PSM": 0,
+        "LEFT_FROM_ORIGO_RIGHT_PSM": 0,
+        "ABOVE_ORIGO_RIGHT_PSM": 0,
+        "BELOW_ORIGO_RIGHT_PSM": 0
+    }
     # <<<<<<< PRE-PROCESSING >>>>>>>>>
 
     # <<<<<<<<<< MAIN LOOP >>>>>>>>>>>
@@ -237,15 +250,22 @@ def main(frame=frame, grayFrameOld = grayFrameOld):
         populateKinematic2DTable(globals.POINTSORDER, videoName, "right", FRAMECOUNT)
         # show the current frame
         cv.imshow(winName, frame)        
-        key = cv.waitKey(500) & 0xFF
+        key = cv.waitKey(300) & 0xFF
 
         # if 'q' key was pressed, break the loop
         if key == ord('q'):
-            logger.warning("Processing of the video files has been interrupted.")
-            break
+            quitNow = input("Do you really want to terminate? Y/N: ")
+            if quitNow == 'y' or quitNow == 'Y':
+                logger.warning("Processing of the video files has been interrupted.")
+                break
         if key == ord('p'):
             frameCopy = videoObj.read()[1]
-
+            FRAMECOUNT += 1
+            addNull = input("Shall we create null for this row? Y/N: ")
+            if addNull == 'y' or addNull == 'Y':
+                # Save the Kinematic data for the right video_name
+                populateKinematic2DTable(globals.POINTSNULL, videoName, "left", FRAMECOUNT, Null=True)
+                populateKinematic2DTable(globals.POINTSNULL, videoName, "right", FRAMECOUNT, Null=True)
             while True:
                 if not pointSelector._movePoint:
                     globals.POINTSORDER = {
