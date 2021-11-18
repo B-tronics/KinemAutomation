@@ -134,8 +134,8 @@ jigsaws
 # All notes
 *.txt
 
-# databases 
-*.sqlite
-
 # all temporary jpg file*
 *.jpg
+
+# .ods
+.ods

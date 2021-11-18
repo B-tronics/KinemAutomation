@@ -73,10 +73,11 @@ def populateVideoTable(videoName):
         pass
 
 def populateKinematic2DTable(kinematicData, videoName, psmSide, frame, Null=False): 
+    id = Video.get(Video.video_name == videoName).id
     if not Null:  
-        if psmSide == "left":
+        if psmSide == "left":            
             Kinematics2D.create(
-                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                video_name = id,
                 frame = frame,
                 psm_origo_x = kinematicData["ORIGO_LEFT_PSM"][0],
                 psm_origo_y = kinematicData["ORIGO_LEFT_PSM"][1],
@@ -93,7 +94,7 @@ def populateKinematic2DTable(kinematicData, videoName, psmSide, frame, Null=Fals
             )
         elif psmSide == "right":
             Kinematics2D.create(
-                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                video_name = id + 1,
                 frame = frame,
                 psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"][0],
                 psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"][1],
@@ -111,7 +112,7 @@ def populateKinematic2DTable(kinematicData, videoName, psmSide, frame, Null=Fals
     else:
         if psmSide == "left":
             Kinematics2D.create(
-                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                video_name = id,
                 frame = frame,
                 psm_origo_x = kinematicData["ORIGO_LEFT_PSM"],
                 psm_origo_y = kinematicData["ORIGO_LEFT_PSM"],
@@ -129,7 +130,7 @@ def populateKinematic2DTable(kinematicData, videoName, psmSide, frame, Null=Fals
 
         elif psmSide == "right":
             Kinematics2D.create(
-                video_name = Video.get(Video.video_name == videoName and Video.psm_side == psmSide).id,
+                video_name = id + 1,
                 frame = frame,
                 psm_origo_x = kinematicData["ORIGO_RIGHT_PSM"],
                 psm_origo_y = kinematicData["ORIGO_RIGHT_PSM"],
