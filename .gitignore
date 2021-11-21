@@ -132,7 +132,7 @@ dmypy.json
 jigsaws
 
 # All notes
-*.txt
+
 
 # all temporary jpg file*
 *.jpg
