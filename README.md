@@ -8,4 +8,4 @@ A tool for automatically regenerate the kinematic data from the JIGSAWS database
 
 Usage:
 
-`python launch.py -f <List_of_videos.txt>
+`python launch.py -f <List_of_videos.txt`
